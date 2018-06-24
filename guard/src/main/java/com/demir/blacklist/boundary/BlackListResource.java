@@ -21,13 +21,14 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("black-list")
+@Validated
 public class BlackListResource {
 
     @Inject
     BlackListRepository repository;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> create(@Validated @RequestBody @Ip @NotNull String ip) {
+    public ResponseEntity<String> create(@RequestBody @Ip @NotNull String ip) {
         repository.persist(new IpAddress(ip));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -56,7 +57,7 @@ public class BlackListResource {
     @RequestMapping(value = "/check/{ip}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Boolean isBanned(@Validated @PathVariable("ip") @Ip String ip) {
+    Boolean isBanned(@PathVariable("ip") @Ip String ip) {
         return repository.isIpInBlackList(ip);
     }
 
