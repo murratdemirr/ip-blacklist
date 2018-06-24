@@ -1,0 +1,46 @@
+package com.demir.blacklist;
+
+import com.demir.blacklist.control.BlackListManager;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * User: muratdemir
+ * Date: 24.06.2018
+ * Time: 13:20
+ */
+@Service
+public class ApiInterceptor implements HandlerInterceptor {
+
+    @Inject
+    BlackListManager manager;
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        checkIp(request.getRemoteAddr());
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+        checkIp(request.getRemoteAddr());
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+
+    }
+
+    private void checkIp(final String ip) {
+        boolean ipBanned = manager.checkIpAddress(ip);
+        if (ipBanned) {
+            throw new IllegalIpAccessException();
+        }
+    }
+}
