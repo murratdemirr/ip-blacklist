@@ -18,17 +18,20 @@ import javax.servlet.http.HttpServletResponse;
 public class ApiInterceptor implements HandlerInterceptor {
 
     @Inject
+    IpAddressParser ipAddressParser;
+    @Inject
     BlackListManager manager;
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        checkIp(request.getRemoteAddr());
+        checkIp(ipAddressParser.getClientIpAddress(request));
         return true;
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-        checkIp(request.getRemoteAddr());
+        checkIp(ipAddressParser.getClientIpAddress(request));
     }
 
     @Override
