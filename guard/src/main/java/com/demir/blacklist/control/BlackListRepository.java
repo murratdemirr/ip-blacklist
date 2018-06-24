@@ -67,11 +67,10 @@ public class BlackListRepository {
     }
 
     public IpAddress findByIp(final String ip) {
-        IpAddress entity = null;
-        if (repositoryMap.containsKey(ip)) {
-            entity = repositoryMap.get(ip);
+        if (!repositoryMap.containsKey(ip)) {
+            throw new EntityNotFoundException();
         }
-        return entity;
+        return repositoryMap.get(ip);
     }
 
 }

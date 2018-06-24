@@ -19,16 +19,25 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class AbstractRestHandler implements ApplicationEventPublisherAware {
 
-    protected final Logger log = LoggerFactory.getLogger(this.getClass());
+    protected final Logger LOG = LoggerFactory.getLogger(this.getClass());
     protected ApplicationEventPublisher eventPublisher;
 
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler(EntityNotFoundException.class)
     public
     @ResponseBody
-    ErrorResponse handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request, HttpServletResponse response) {
-        log.info("ResourceNotFoundException handler:" + ex.getMessage());
+    ErrorResponse handleResourceNotFoundException(EntityNotFoundException ex, WebRequest request, HttpServletResponse response) {
+        LOG.info("ResourceNotFoundException handler:" + ex.getMessage());
+        return new ErrorResponse(ex, "Sorry I couldn't find it.");
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public
+    @ResponseBody
+    ErrorResponse handleResourceNotFoundException(EntityAlreadyExistsException ex, WebRequest request, HttpServletResponse response) {
+        LOG.info("ResourceNotFoundException handler:" + ex.getMessage());
         return new ErrorResponse(ex, "Sorry I couldn't find it.");
     }
 

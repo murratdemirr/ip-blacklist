@@ -1,14 +1,15 @@
 package com.demir.blacklist.boundary;
 
-import com.demir.blacklist.EntityAlreadyExistsException;
-import com.demir.blacklist.ResourceNotFoundException;
+import com.demir.blacklist.Ip;
 import com.demir.blacklist.control.BlackListRepository;
 import com.demir.blacklist.entity.IpAddress;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -26,18 +27,12 @@ public class BlackListResource {
     BlackListRepository repository;
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<String> create(@RequestBody String ip) {
-        HttpStatus responseStatus;
-        try {
-            repository.persist(new IpAddress(ip));
-            responseStatus = HttpStatus.CREATED;
-        } catch (EntityAlreadyExistsException ex) {
-            responseStatus = HttpStatus.CONFLICT;
-        }
-        return ResponseEntity.status(responseStatus).build();
+    public ResponseEntity<String> create(@Validated @RequestBody @Ip @NotNull String ip) {
+        repository.persist(new IpAddress(ip));
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     List<String> findAll() {
@@ -47,14 +42,23 @@ public class BlackListResource {
     @RequestMapping(value = "/{ip}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    IpAddress find(@PathVariable("ip") String ip) {
-        IpAddress entity = repository.findByIp(ip);
-        if (entity == null) {
-            throw new ResourceNotFoundException("Entity not found");
-        }
-        return entity;
+    IpAddress find(@PathVariable("ip") @Ip String ip) {
+        return repository.findByIp(ip);
     }
 
+    @RequestMapping(value = "/{ip}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    void delete(@PathVariable("ip") @Ip String ip) {
+        repository.delete(ip);
+    }
+
+    @RequestMapping(value = "/check/{ip}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    Boolean isBanned(@Validated @PathVariable("ip") @Ip String ip) {
+        return repository.isIpInBlackList(ip);
+    }
 
 
 }
