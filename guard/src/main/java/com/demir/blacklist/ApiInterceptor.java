@@ -2,7 +2,6 @@ package com.demir.blacklist;
 
 import com.demir.blacklist.control.BlackListManager;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -15,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  * Date: 24.06.2018
  * Time: 13:20
  */
-@Service
+@Component
 public class ApiInterceptor implements HandlerInterceptor {
 
     @Inject
