@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 
 /**
  * User: muratdemir
@@ -29,7 +31,7 @@ public class AbstractRestHandler implements ApplicationEventPublisherAware {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     ErrorResponse entityNotFound(EntityNotFoundException ex, WebRequest request, HttpServletResponse response) {
-        LOG.info("ResourceNotFoundException handler:" + ex.getMessage());
+        LOG.info("EntityNotFoundException handler:" + ex.getMessage());
         return new ErrorResponse(ex, "entity not found.");
     }
 
@@ -39,7 +41,7 @@ public class AbstractRestHandler implements ApplicationEventPublisherAware {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     ErrorResponse entityAlreadyExists(EntityAlreadyExistsException ex, WebRequest request, HttpServletResponse response) {
-        LOG.info("ResourceNotFoundException handler:" + ex.getMessage());
+        LOG.info("EntityAlreadyExistsException handler:" + ex.getMessage());
         return new ErrorResponse(ex, "entity already exists");
     }
 
@@ -49,10 +51,9 @@ public class AbstractRestHandler implements ApplicationEventPublisherAware {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
     ErrorResponse IllegalIpAccess(IllegalIpAccessException ex, WebRequest request, HttpServletResponse response) {
-        LOG.info("ResourceNotFoundException handler:" + ex.getMessage());
+        LOG.info("IllegalIpAccessException handler:" + ex.getMessage());
         return new ErrorResponse(ex, "Illegal Ip Access");
     }
-
 
     @Override
     public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
