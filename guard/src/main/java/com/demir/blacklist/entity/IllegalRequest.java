@@ -1,7 +1,5 @@
 package com.demir.blacklist.entity;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * User: muratdemir
  * Date: 24.06.2018

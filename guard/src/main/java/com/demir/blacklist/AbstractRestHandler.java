@@ -29,7 +29,7 @@ public class AbstractRestHandler implements ApplicationEventPublisherAware {
     @ResponseBody
     ErrorResponse handleResourceNotFoundException(EntityNotFoundException ex, WebRequest request, HttpServletResponse response) {
         LOG.info("ResourceNotFoundException handler:" + ex.getMessage());
-        return new ErrorResponse(ex, "Sorry I couldn't find it.");
+        return new ErrorResponse(ex, "entity not found.");
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)
@@ -38,8 +38,18 @@ public class AbstractRestHandler implements ApplicationEventPublisherAware {
     @ResponseBody
     ErrorResponse handleResourceNotFoundException(EntityAlreadyExistsException ex, WebRequest request, HttpServletResponse response) {
         LOG.info("ResourceNotFoundException handler:" + ex.getMessage());
-        return new ErrorResponse(ex, "Sorry I couldn't find it.");
+        return new ErrorResponse(ex, "entity already exists");
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(IllegalIpAccessException.class)
+    public
+    @ResponseBody
+    ErrorResponse handleResourceNotFoundException(IllegalIpAccessException ex, WebRequest request, HttpServletResponse response) {
+        LOG.info("ResourceNotFoundException handler:" + ex.getMessage());
+        return new ErrorResponse(ex, "Illegal Ip Access");
+    }
+
 
     @Override
     public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
