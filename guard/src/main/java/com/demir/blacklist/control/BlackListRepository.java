@@ -1,6 +1,6 @@
 package com.demir.blacklist.control;
 
-import com.demir.blacklist.EntityAlreadyException;
+import com.demir.blacklist.EntityAlreadyExistsException;
 import com.demir.blacklist.EntityNotFoundException;
 import com.demir.blacklist.entity.IpAddress;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ public class BlackListRepository {
         LOG.info("Repository initialized as a singleton service");
     }
 
-    public void delete(final String ip) throws Exception {
+    public void delete(final String ip) throws EntityNotFoundException {
         if (!repositoryMap.containsKey(ip)) {
             throw new EntityNotFoundException();
         }
@@ -51,9 +51,9 @@ public class BlackListRepository {
     }
 
 
-    public void persist(final IpAddress ipAddress) throws Exception {
+    public void persist(final IpAddress ipAddress) throws EntityAlreadyExistsException {
         if (repositoryMap.containsKey(ipAddress.getIp())) {
-            throw new EntityAlreadyException();
+            throw new EntityAlreadyExistsException();
         }
         repositoryMap.put(ipAddress.getIp(), ipAddress);
     }
@@ -64,6 +64,14 @@ public class BlackListRepository {
             result = repositoryMap.values().stream().map(e -> e.getIp()).collect(Collectors.toList());
         }
         return result;
+    }
+
+    public IpAddress findByIp(final String ip) {
+        IpAddress entity = null;
+        if (repositoryMap.containsKey(ip)) {
+            entity = repositoryMap.get(ip);
+        }
+        return entity;
     }
 
 }

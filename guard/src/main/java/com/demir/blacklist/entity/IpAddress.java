@@ -10,7 +10,12 @@ import java.time.LocalDateTime;
 public class IpAddress {
 
     private String ip;
-    private LocalDateTime bannedTime = LocalDateTime.now();
+    private LocalDateTime bannedTime;
+
+    public IpAddress(String ip) {
+        this.ip = ip;
+        this.bannedTime = LocalDateTime.now();
+    }
 
     public String getIp() {
         return ip;
