@@ -19,7 +19,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("back-list")
+@RequestMapping("black-list")
 public class BlackListResource {
 
     @Inject
