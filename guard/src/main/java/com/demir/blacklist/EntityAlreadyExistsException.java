@@ -1,10 +1,14 @@
 package com.demir.blacklist;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 /**
  * User: muratdemir
  * Date: 24.06.2018
  * Time: 12:02
  */
+@ResponseStatus(HttpStatus.CONFLICT)
 public class EntityAlreadyExistsException extends RuntimeException {
 
     public EntityAlreadyExistsException() {

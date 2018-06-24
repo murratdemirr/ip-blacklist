@@ -23,29 +23,32 @@ public class AbstractRestHandler implements ApplicationEventPublisherAware {
     protected ApplicationEventPublisher eventPublisher;
 
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+
     @ExceptionHandler(EntityNotFoundException.class)
     public
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    ErrorResponse handleResourceNotFoundException(EntityNotFoundException ex, WebRequest request, HttpServletResponse response) {
+    ErrorResponse entityNotFound(EntityNotFoundException ex, WebRequest request, HttpServletResponse response) {
         LOG.info("ResourceNotFoundException handler:" + ex.getMessage());
         return new ErrorResponse(ex, "entity not found.");
     }
 
-    @ResponseStatus(HttpStatus.CONFLICT)
+
     @ExceptionHandler(EntityAlreadyExistsException.class)
     public
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
-    ErrorResponse handleResourceNotFoundException(EntityAlreadyExistsException ex, WebRequest request, HttpServletResponse response) {
+    ErrorResponse entityAlreadyExists(EntityAlreadyExistsException ex, WebRequest request, HttpServletResponse response) {
         LOG.info("ResourceNotFoundException handler:" + ex.getMessage());
         return new ErrorResponse(ex, "entity already exists");
     }
 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+
     @ExceptionHandler(IllegalIpAccessException.class)
     public
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ResponseBody
-    ErrorResponse handleResourceNotFoundException(IllegalIpAccessException ex, WebRequest request, HttpServletResponse response) {
+    ErrorResponse IllegalIpAccess(IllegalIpAccessException ex, WebRequest request, HttpServletResponse response) {
         LOG.info("ResourceNotFoundException handler:" + ex.getMessage());
         return new ErrorResponse(ex, "Illegal Ip Access");
     }
